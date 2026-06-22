@@ -33,7 +33,6 @@ module.exports = {
             const yt = spawn(interaction.client.ytdl_path, [
                 "-f", "ba",
                 "-o", "-",
-                "-g",
                 "--ffmpeg-location", pathToFfmpeg,
                 "-4",
                 // "--extractor-args", "youtube:player_client=android",
