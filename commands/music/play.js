@@ -31,11 +31,11 @@ module.exports = {
         {
             console.time("yt-dlp spawn");
             const yt = spawn(interaction.client.ytdl_path, [
-                "-f", "251",
+                "-f", "ba",
                 "-o", "-",
                 "--ffmpeg-location", pathToFfmpeg,
                 "-4",
-                "--extractor-args", "youtube:player_client=tv",
+                "--extractor-args", "youtube:player_client=android",
                 // "--js-runtimes", `node:${process.execPath}`,
                 query
             ]);
