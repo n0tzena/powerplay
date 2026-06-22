@@ -81,10 +81,15 @@ client.player.on(AudioPlayerStatus.Idle, () => {
 		client.yt.kill()
 
 		const yt = spawn("./bin/yt-dlp.exe", [
-            "-f", "251",
-            "-o", "-",
-            "--ffmpeg-location", pathToFfmpeg,
+			"-f", "ba",
+			"-o", "-",
+			"--ffmpeg-location", pathToFfmpeg,
 			"-4",
+			// "--extractor-args", "youtube:player_client=android",
+			"--no-playlist",
+			"--no-warnings",
+			"--quiet",
+			// "--js-runtimes", `node:${process.execPath}`,
             client.query.shift()
         ]);
 
