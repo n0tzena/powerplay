@@ -15,7 +15,8 @@ CLIENTID="0000000000000000000"
 
 Substitua o Token e o Client ID pelos do seu bot.
 
-Depois, abra o terminal da sua preferência e execute o seguinte comando:
+Depois, abra o terminal da sua preferência e execute os seguinte comandos:
 ```shell
+npm deploy
 npm start
 ```
