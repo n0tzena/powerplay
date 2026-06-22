@@ -1,5 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder, MessageFlags, Embed } = require('discord.js');
-const { joinVoiceChannel, createAudioResource, createAudioPlayer, NoSubscriberBehavior, AudioPlayerStatus } = require('@discordjs/voice');
+const { joinVoiceChannel, createAudioResource, createAudioPlayer, NoSubscriberBehavior, AudioPlayerStatus, StreamType } = require('@discordjs/voice');
 const { YtDlp } = require('ytdlp-nodejs')
 const pathToFfmpeg = require('ffmpeg-static')
 
@@ -29,12 +29,17 @@ module.exports = {
 
         if(interaction.client.player.state.status == AudioPlayerStatus.Idle)
         {
-            let resource = createAudioResource(interaction.client.ytdlp.stream(query)
-                //.type("opus")
+            let resource = await createAudioResource(interaction.client.ytdlp.stream(query, 
+                {
+                    debugPrintCommandLine: true,
+                    verbose: true,
+                    postprocessorArgs: {ffmpeg: [' "-preset ultrafast"']}
+                })
                 .filter("audioonly")
                 .on('progress', (p) => console.log(p.percentage_str))
-                .toBuffer());
+                .toBuffer(), { inputType: StreamType.Arbitrary });
             interaction.client.player.play(resource);
+            console.log(resource.StreamType)
         }
         else
         {
