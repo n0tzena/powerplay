@@ -6,8 +6,8 @@ Bot de música para o Discord.
 
 Crie uma aplicação no [Discord Developer Portal](https://discord.com/developers/applications) e pegue o Token e o Client ID do seu bot.
 
-Crie um arquivo .env com as seguintes variáveis:
+Crie um arquivo .env com as seguintes variáveis:  
 ``
-TOKEN="###"
+TOKEN="###"\n
 CLIENTID="0000000000000000000"
 ``
