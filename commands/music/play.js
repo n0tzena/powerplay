@@ -35,6 +35,7 @@ module.exports = {
                 "-o", "-",
                 "--ffmpeg-location", pathToFfmpeg,
                 "-4",
+                "--extractor-args", "youtube:player_client=android",
                 // "--js-runtimes", `node:${process.execPath}`,
                 query
             ]);
