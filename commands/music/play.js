@@ -24,9 +24,6 @@ module.exports = {
 
         // let info = await interaction.client.ytdlp.getInfoAsync(query)
 
-        embed = new EmbedBuilder()
-            .setTitle("a")
-
         if(interaction.client.player.state.status == AudioPlayerStatus.Idle)
         {
             console.time("yt-dlp spawn");
@@ -53,27 +50,12 @@ module.exports = {
             const resource = createAudioResource(yt.stdout, {
                 inputType: StreamType.WebmOpus
             });
-            /*
-            let resource = await createAudioResource(interaction.client.ytdlp.stream(query, 
-                {
-                    debugPrintCommandLine: true,
-                    verbose: true,
-                    postprocessorArgs: {ffmpeg: ["-preset", "ultrafast", "-c:a", "copy"]}
-                })
-                .filter("audioonly")
-                .on('progress', (p) => console.log(p.percentage_str))
-                .on("error", console.error)
-                .on("end", () => {
-                    console.log("stream terminou");
-                })
-                .on("close", () => {
-                    console.log("stream fechou");
-                }), { inputType: StreamType.WebmOpus });*/
+            
             interaction.client.player.play(resource);
         }
         else
         {
-            interaction.client.query.push(query);
+            interaction.client.queue.push(query);
         }
 
         const connection = joinVoiceChannel({

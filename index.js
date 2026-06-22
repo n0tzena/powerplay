@@ -23,7 +23,7 @@ else if (os.platform() === "darwin") {
 
 console.log(client.ytdl_path)
 client.player = createAudioPlayer({behaviors: {noSubscriber: NoSubscriberBehavior.Play}});
-client.query = []
+client.queue = []
 client.yt = null;
 
 const foldersPath = path.join(__dirname, 'commands');
@@ -76,11 +76,11 @@ client.once(Events.ClientReady, (readyClient) => {
 });
 
 client.player.on(AudioPlayerStatus.Idle, () => {
-	if(client.query.length > 0)
+	if(client.queue.length > 0)
 	{
 		client.yt.kill()
 
-		const yt = spawn("./bin/yt-dlp.exe", [
+		const yt = spawn(client.ytdl_path, [
 			"-f", "ba",
 			"-o", "-",
 			"--ffmpeg-location", pathToFfmpeg,

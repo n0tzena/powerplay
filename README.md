@@ -18,6 +18,6 @@ Substitua o Token e o Client ID pelos do seu bot.
 Depois, abra o terminal da sua preferência e execute os seguinte comandos:
 ```shell
 npm install
-npm deploy
+npm run deploy
 npm start
 ```
