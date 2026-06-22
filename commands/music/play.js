@@ -32,6 +32,7 @@ module.exports = {
             let resource = createAudioResource(interaction.client.ytdlp.stream(query)
                 //.type("opus")
                 .filter("audioonly")
+                .on('progress', (p) => console.log(p.percentage_str))
                 .toBuffer());
             interaction.client.player.play(resource);
         }
