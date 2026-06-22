@@ -1,7 +1,7 @@
 const { EmbedBuilder, SlashCommandBuilder, MessageFlags, Embed } = require('discord.js');
 const { joinVoiceChannel, createAudioResource, createAudioPlayer, NoSubscriberBehavior, AudioPlayerStatus, StreamType } = require('@discordjs/voice');
-const { YtDlp } = require('ytdlp-nodejs')
 const pathToFfmpeg = require('ffmpeg-static')
+const { spawn } = require("child_process");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,6 +29,21 @@ module.exports = {
 
         if(interaction.client.player.state.status == AudioPlayerStatus.Idle)
         {
+            const yt = spawn(interaction.client.ytdl_path, [
+                "-f", "251",
+                "-o", "-",
+                "--ffmpeg-location", pathToFfmpeg,
+                query
+            ]);
+
+            interaction.client.yt = yt;
+
+            yt.stderr.on("data", d => console.log(d.toString()));
+
+            const resource = createAudioResource(yt.stdout, {
+                inputType: StreamType.WebmOpus
+            });
+            /*
             let resource = await createAudioResource(interaction.client.ytdlp.stream(query, 
                 {
                     debugPrintCommandLine: true,
@@ -37,7 +52,13 @@ module.exports = {
                 })
                 .filter("audioonly")
                 .on('progress', (p) => console.log(p.percentage_str))
-                .toBuffer(), { inputType: StreamType.WebmOpus });
+                .on("error", console.error)
+                .on("end", () => {
+                    console.log("stream terminou");
+                })
+                .on("close", () => {
+                    console.log("stream fechou");
+                }), { inputType: StreamType.WebmOpus });*/
             interaction.client.player.play(resource);
         }
         else
