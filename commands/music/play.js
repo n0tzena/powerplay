@@ -33,13 +33,12 @@ module.exports = {
                 {
                     debugPrintCommandLine: true,
                     verbose: true,
-                    postprocessorArgs: {ffmpeg: ["-preset", "ultrafast"]}
+                    postprocessorArgs: {ffmpeg: ["-preset", "ultrafast", "-c:a", "copy"]}
                 })
                 .filter("audioonly")
                 .on('progress', (p) => console.log(p.percentage_str))
-                .toBuffer(), { inputType: StreamType.Arbitrary });
+                .toBuffer(), { inputType: StreamType.WebmOpus });
             interaction.client.player.play(resource);
-            console.log(resource.StreamType)
         }
         else
         {
