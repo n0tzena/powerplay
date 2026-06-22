@@ -8,7 +8,7 @@ Crie uma aplicação no [Discord Developer Portal](https://discord.com/developer
 
 Crie um arquivo .env com as seguintes variáveis:  
 
-``
-TOKEN="###"\n
+```env
+TOKEN="###"  
 CLIENTID="0000000000000000000"
-``
+```
