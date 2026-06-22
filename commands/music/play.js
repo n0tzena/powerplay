@@ -35,12 +35,13 @@ module.exports = {
                 "-o", "-",
                 "--ffmpeg-location", pathToFfmpeg,
                 "-4",
+                "--js-runtimes", `node:${process.execPath}`,
                 query
             ]);
             yt.stdout.once("data", () => {
                 console.timeEnd("yt-dlp spawn");
             });
-            
+
             interaction.client.yt = yt;
 
             yt.stderr.on("data", d => console.log(d.toString()));
