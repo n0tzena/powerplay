@@ -22,7 +22,7 @@ module.exports = {
         const guildId = interaction.member.voice.guild.id;
         const adapterCreator = interaction.member.voice.guild.voiceAdapterCreator;
 
-        let info = await interaction.client.ytdlp.getInfoAsync(query)
+        // let info = await interaction.client.ytdlp.getInfoAsync(query)
 
         embed = new EmbedBuilder()
             .setTitle("a")
@@ -44,7 +44,8 @@ module.exports = {
         });
 
         connection.subscribe(interaction.client.player);
-
-        await interaction.editReply({ content: `Adicionado à fila: [${info.title}](${query})`/*, flags: MessageFlags.Ephemeral*/});
+        
+        // [${info.title}](${query})
+        await interaction.editReply({ content: `Adicionado à fila: ${query}`/*, flags: MessageFlags.Ephemeral*/});
     }
 }
