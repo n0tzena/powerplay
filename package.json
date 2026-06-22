@@ -1,0 +1,30 @@
+{
+  "name": "powerplay",
+  "version": "1.0.0",
+  "description": "Discord Music Bot",
+  "homepage": "https://github.com/n0tzena/powerplay#readme",
+  "bugs": {
+    "url": "https://github.com/n0tzena/powerplay/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n0tzena/powerplay.git"
+  },
+  "license": "UNLICENSED",
+  "author": "Victor Gomes",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "deploy": "node deploy-commands.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@discordjs/voice": "^0.19.0",
+    "@snazzah/davey": "^0.1.9",
+    "discord.js": "^14.25.1",
+    "dotenv": "^17.2.3",
+    "ffmpeg-static": "^5.3.0",
+    "ytdlp-nodejs": "^3.4.4"
+  }
+}
