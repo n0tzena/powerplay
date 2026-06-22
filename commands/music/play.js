@@ -35,7 +35,7 @@ module.exports = {
                 "-o", "-",
                 "--ffmpeg-location", pathToFfmpeg,
                 "-4",
-                "--js-runtimes", `node:${process.execPath}`,
+                // "--js-runtimes", `node:${process.execPath}`,
                 query
             ]);
             yt.stdout.once("data", () => {
