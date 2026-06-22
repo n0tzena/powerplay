@@ -29,7 +29,10 @@ module.exports = {
 
         if(interaction.client.player.state.status == AudioPlayerStatus.Idle)
         {
-            let resource = createAudioResource(interaction.client.ytdlp.stream(query).type("opus").filter("audioonly").toBuffer());
+            let resource = createAudioResource(interaction.client.ytdlp.stream(query)
+                //.type("opus")
+                .filter("audioonly")
+                .toBuffer());
             interaction.client.player.play(resource);
         }
         else
