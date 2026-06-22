@@ -12,3 +12,10 @@ Crie um arquivo .env com as seguintes variáveis:
 TOKEN="###"  
 CLIENTID="0000000000000000000"
 ```
+
+Substitua o Token e o Client ID pelos do seu bot.
+
+Depois, abra o terminal da sua preferência e execute o seguinte comando:
+```shell
+npm start
+```
