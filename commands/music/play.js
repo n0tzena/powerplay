@@ -33,7 +33,7 @@ module.exports = {
                 {
                     debugPrintCommandLine: true,
                     verbose: true,
-                    postprocessorArgs: {ffmpeg: [' "-preset ultrafast"']}
+                    postprocessorArgs: {ffmpeg: ["-preset", "ultrafast"]}
                 })
                 .filter("audioonly")
                 .on('progress', (p) => console.log(p.percentage_str))
