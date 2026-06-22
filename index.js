@@ -78,10 +78,13 @@ client.once(Events.ClientReady, (readyClient) => {
 client.player.on(AudioPlayerStatus.Idle, () => {
 	if(client.query.length > 0)
 	{
+		client.yt.kill()
+
 		const yt = spawn("./bin/yt-dlp.exe", [
             "-f", "251",
             "-o", "-",
             "--ffmpeg-location", pathToFfmpeg,
+			"-4",
             client.query.shift()
         ]);
 

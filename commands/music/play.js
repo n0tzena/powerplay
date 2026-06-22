@@ -29,13 +29,18 @@ module.exports = {
 
         if(interaction.client.player.state.status == AudioPlayerStatus.Idle)
         {
+            console.time("yt-dlp spawn");
             const yt = spawn(interaction.client.ytdl_path, [
                 "-f", "251",
                 "-o", "-",
                 "--ffmpeg-location", pathToFfmpeg,
+                "-4",
                 query
             ]);
-
+            yt.stdout.once("data", () => {
+                console.timeEnd("yt-dlp spawn");
+            });
+            
             interaction.client.yt = yt;
 
             yt.stderr.on("data", d => console.log(d.toString()));
