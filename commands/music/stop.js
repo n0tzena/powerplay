@@ -12,10 +12,10 @@ module.exports = {
     {
         await interaction.deferReply();
 
-        if(client.query.length > 0)
+        if(interaction.client.queue.length > 0)
         {
-            client.yt.kill();
-            client.queue = [];
+            interaction.client.yt.kill();
+            interaction.client.queue = [];
         }
         
         // [${info.title}](${query})

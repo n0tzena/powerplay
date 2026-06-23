@@ -12,29 +12,9 @@ module.exports = {
     {
         await interaction.deferReply();
 
-        if(client.query.length > 0)
+        if(interaction.client.queue.length > 0)
         {
-            client.yt.kill()
-
-            const yt = spawn(client.ytdl_path, [
-                "-f", "ba",
-                "-o", "-",
-                "--ffmpeg-location", pathToFfmpeg,
-                "-4",
-                // "--extractor-args", "youtube:player_client=android",
-                "--no-playlist",
-                "--no-warnings",
-                "--quiet",
-                // "--js-runtimes", `node:${process.execPath}`,
-                client.query.shift()
-            ]);
-
-            client.yt = yt;
-            yt.stderr.on("data", d => console.log(d.toString()));
-
-            const resource = createAudioResource(yt.stdout, {
-                inputType: StreamType.WebmOpus
-            });
+            interaction.client.player.stop();
         }
         
         // [${info.title}](${query})

@@ -2,8 +2,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os')
 const { Client, Collection, Events, GatewayIntentBits, MessageFlags } = require('discord.js');
-const { joinVoiceChannel, createAudioResource, createAudioPlayer, NoSubscriberBehavior, AudioPlayerStatus } = require('@discordjs/voice');
+const { joinVoiceChannel, createAudioResource, createAudioPlayer, NoSubscriberBehavior, AudioPlayerStatus, StreamType } = require('@discordjs/voice');
 const pathToFfmpeg = require('ffmpeg-static')
+const { spawn } = require("child_process");
 require('dotenv').config();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
@@ -79,10 +80,11 @@ client.player.on(AudioPlayerStatus.Idle, () => {
 	if(client.queue.length > 0)
 	{
 		client.yt.kill()
+		client.yt.stdout.destroy()
 
 		const yt = spawn(client.ytdl_path, [
 			"-f", "ba",
-			"-o", "-",
+			//"-o", "-",
 			"--ffmpeg-location", pathToFfmpeg,
 			"-4",
 			// "--extractor-args", "youtube:player_client=android",
@@ -90,7 +92,7 @@ client.player.on(AudioPlayerStatus.Idle, () => {
 			"--no-warnings",
 			"--quiet",
 			// "--js-runtimes", `node:${process.execPath}`,
-            client.query.shift()
+            client.queue.shift()
         ]);
 
         client.yt = yt;
@@ -99,6 +101,8 @@ client.player.on(AudioPlayerStatus.Idle, () => {
         const resource = createAudioResource(yt.stdout, {
             inputType: StreamType.WebmOpus
         });
+
+		client.player.play(resource)
 	}
 })
 client.player.on("error", console.error);
