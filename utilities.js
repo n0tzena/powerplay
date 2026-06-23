@@ -40,6 +40,9 @@ function getAudioUrl(query, ytdl_path) {
 
 function createStream(url, ffmpeg_path) {
 
+    if(process.env.SYSTEM_FFMPEG == "TRUE")
+        ffmpeg_path = "ffmpeg"
+
     const start = Date.now();
 
     const ffmpeg = spawn(ffmpeg_path, [
