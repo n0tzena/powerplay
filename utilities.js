@@ -18,7 +18,7 @@ function getAudioUrl(query, ytdl_path) {
             "--concurrent-fragments", "1",
             "--extractor-args", "youtube:player_client=android",
             query
-        ]);
+        ], { stdio: ["ignore", "pipe", "pipe"] });
 
         let out = "";
 
@@ -39,27 +39,6 @@ function getAudioUrl(query, ytdl_path) {
 }
 
 function createStream(url, ffmpeg_path) {
-  console.log("FFMPEG PATH:", ffmpeg_path);
-
-  const ffmpeg = spawn(ffmpeg_path, [
-    "-version"
-  ]);
-
-  ffmpeg.stdout.on("data", d => console.log("STDOUT:", d.toString()));
-  ffmpeg.stderr.on("data", d => console.log("STDERR:", d.toString()));
-
-  ffmpeg.on("error", err => {
-    console.log("FFMPEG SPAWN ERROR:", err);
-  });
-
-  ffmpeg.on("close", code => {
-    console.log("FFMPEG EXIT:", code);
-  });
-
-  return null;
-}
-
-/*function createStream(url, ffmpeg_path) {
 
     const start = Date.now();
 
@@ -83,7 +62,7 @@ function createStream(url, ffmpeg_path) {
         "-ac", "2",
 
         "pipe:1"
-    ]);
+    ], { stdio: ["ignore", "pipe", "pipe"] });
 
     ffmpeg.stderr.on("data", d => {
     console.log("FFMPEG:", d.toString());
@@ -103,7 +82,7 @@ function createStream(url, ffmpeg_path) {
         stream: ffmpeg.stdout,
         process: ffmpeg
     }
-}*/
+}
 
 module.exports = { createStream, getAudioUrl };
 
