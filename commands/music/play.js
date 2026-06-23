@@ -28,6 +28,7 @@ module.exports = {
         if(interaction.client.player.state.status == AudioPlayerStatus.Idle)
         {
             const urlObject = await getAudioUrl(query, interaction.client.ytdl_path);
+            console.log(`URL: ${urlObject.url}`)
             const streamObject = createStream(urlObject.url, pathToFfmpeg);
 
             interaction.client.yt = urlObject.process;
