@@ -2,6 +2,7 @@ const { EmbedBuilder, SlashCommandBuilder, MessageFlags, Embed } = require('disc
 const { joinVoiceChannel, createAudioResource, createAudioPlayer, NoSubscriberBehavior, AudioPlayerStatus, StreamType } = require('@discordjs/voice');
 const pathToFfmpeg = require('ffmpeg-static')
 const { spawn } = require("child_process");
+const { createStream, getAudioUrl } = require("../../utilities.js")
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -26,29 +27,14 @@ module.exports = {
 
         if(interaction.client.player.state.status == AudioPlayerStatus.Idle)
         {
-            console.time("yt-dlp spawn");
-            const yt = spawn(interaction.client.ytdl_path, [
-                "-f", "ba",
-                //"-o", "-",
-                "--ffmpeg-location", pathToFfmpeg,
-                "-4",
-                // "--extractor-args", "youtube:player_client=android",
-                "--no-playlist",
-                "--no-warnings",
-                "--quiet",
-                // "--js-runtimes", `node:${process.execPath}`,
-                query
-            ]);
-            yt.stdout.once("data", () => {
-                console.timeEnd("yt-dlp spawn");
-            });
+            const urlObject = await getAudioUrl(query, interaction.client.ytdl_path);
+            const streamObject = createStream(urlObject.url, pathToFfmpeg);
 
-            interaction.client.yt = yt;
+            interaction.client.yt = urlObject.process;
+            interaction.client.ffmpeg = streamObject.process;
 
-            yt.stderr.on("data", d => console.log(d.toString()));
-
-            const resource = createAudioResource(yt.stdout, {
-                inputType: StreamType.WebmOpus
+            const resource = createAudioResource(streamObject.stream, {
+                inputType: StreamType.Raw
             });
             
             interaction.client.player.play(resource);

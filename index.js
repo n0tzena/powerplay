@@ -26,6 +26,7 @@ console.log(client.ytdl_path)
 client.player = createAudioPlayer({behaviors: {noSubscriber: NoSubscriberBehavior.Play}});
 client.queue = []
 client.yt = null;
+client.ffmpeg = null;
 
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
