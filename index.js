@@ -96,13 +96,27 @@ client.player.on(AudioPlayerStatus.Idle, async () => {
 	if(client.next?.url)
 	{	
 		const streamObject = createStream(client.next.url, pathToFfmpeg);
+		client.current.ffmpeg = streamObject.process;
 
-		// client.next = {};
+		client.next = {};
 		
 		const resource = createAudioResource(streamObject.stream, {
             inputType: StreamType.Raw
         });            
         client.player.play(resource);
+
+		if(client.queue.length > 0)
+		{
+			if(!client.next?.url)
+            {
+                const nextUrlObject = await getAudioUrl(client.queue.shift(), client.ytdl_path);
+                // console.log(`URL: ${urlObject.url}`)
+                // const nextStreamObject = createStream(nextUrlObject.url, pathToFfmpeg);
+
+                client.next.url = nextUrlObject.url;
+                nextUrlObject.process.kill("SIGKILL");
+            }
+		}
 	}
 	// fallback
 	else if(client.queue.length > 0)

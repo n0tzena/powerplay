@@ -9,7 +9,7 @@ function getAudioUrl(query, ytdl_path) {
             "-f", "bestaudio[ext=webm]/bestaudio/best",
             "-g",
             "--no-playlist",
-            "--quiet",
+            //"--quiet",
             "--no-warnings",
             "--extractor-retries", "1",
             "--fragment-retries", "1",

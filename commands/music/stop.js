@@ -15,6 +15,7 @@ module.exports = {
         if(interaction.client.queue.length > 0)
         {
             interaction.client.queue = [];
+            interaction.client.next = {};
             interaction.client.player.stop();
         }
         

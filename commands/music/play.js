@@ -43,7 +43,7 @@ module.exports = {
         else
         {
             interaction.client.queue.push(query);
-            if(!interaction.client.next?.stream)
+            if(!interaction.client.next?.url)
             {
                 const nextUrlObject = await getAudioUrl(interaction.client.queue.shift(), interaction.client.ytdl_path);
                 // console.log(`URL: ${urlObject.url}`)
@@ -60,7 +60,15 @@ module.exports = {
             adapterCreator: adapterCreator
         });
 
-        connection.subscribe(interaction.client.player);
+        // console.log(connection.state.status);
+        const sub = connection.subscribe(interaction.client.player);
+        // console.log("subscription:", !!sub);
+
+        /*connection.on("stateChange", (oldState, newState) => {
+            console.log(`${oldState.status} -> ${newState.status}`);
+        });*/
+
+        connection.on("error", console.error);
         
         // [${info.title}](${query})
         await interaction.editReply({ content: `Adicionado à fila: ${query}`/*, flags: MessageFlags.Ephemeral*/});
