@@ -28,11 +28,11 @@ module.exports = {
         if(interaction.client.player.state.status == AudioPlayerStatus.Idle)
         {
             const urlObject = await getAudioUrl(query, interaction.client.ytdl_path);
-            console.log(`URL: ${urlObject.url}`)
+            // console.log(`URL: ${urlObject.url}`)
             const streamObject = createStream(urlObject.url, pathToFfmpeg);
 
-            interaction.client.yt = urlObject.process;
-            interaction.client.ffmpeg = streamObject.process;
+            interaction.client.current.yt = urlObject.process;
+            interaction.client.current.ffmpeg = streamObject.process;
 
             const resource = createAudioResource(streamObject.stream, {
                 inputType: StreamType.Raw
@@ -43,6 +43,15 @@ module.exports = {
         else
         {
             interaction.client.queue.push(query);
+            if(!interaction.client.next?.stream)
+            {
+                const nextUrlObject = await getAudioUrl(interaction.client.queue.shift(), interaction.client.ytdl_path);
+                // console.log(`URL: ${urlObject.url}`)
+                // const nextStreamObject = createStream(nextUrlObject.url, pathToFfmpeg);
+
+                interaction.client.next.url = nextUrlObject.url;
+                nextUrlObject.process.kill("SIGKILL");
+            }
         }
 
         const connection = joinVoiceChannel({

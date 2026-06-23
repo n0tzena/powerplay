@@ -14,8 +14,8 @@ module.exports = {
 
         if(interaction.client.queue.length > 0)
         {
-            interaction.client.yt.kill();
             interaction.client.queue = [];
+            interaction.client.player.stop();
         }
         
         // [${info.title}](${query})

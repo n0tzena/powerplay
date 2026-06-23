@@ -11,11 +11,8 @@ module.exports = {
     async execute(interaction)
     {
         await interaction.deferReply();
-
-        if(interaction.client.queue.length > 0)
-        {
-            interaction.client.player.stop();
-        }
+        
+        interaction.client.player.stop();
         
         // [${info.title}](${query})
         await interaction.editReply({ content: `Pulando música...`/*, flags: MessageFlags.Ephemeral*/});

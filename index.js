@@ -5,6 +5,7 @@ const { Client, Collection, Events, GatewayIntentBits, MessageFlags } = require(
 const { joinVoiceChannel, createAudioResource, createAudioPlayer, NoSubscriberBehavior, AudioPlayerStatus, StreamType } = require('@discordjs/voice');
 const pathToFfmpeg = require('ffmpeg-static')
 const { spawn } = require("child_process");
+const { createStream, getAudioUrl, stopProcess } = require("./utilities.js")
 require('dotenv').config();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
@@ -22,11 +23,12 @@ else if (os.platform() === "darwin") {
     client.ytdl_path = path.join(__dirname, "bin", "darwin", "yt-dlp_macos");
 }
 
-console.log(client.ytdl_path)
+console.log(client.ytdl_path);
+
 client.player = createAudioPlayer({behaviors: {noSubscriber: NoSubscriberBehavior.Play}});
-client.queue = []
-client.yt = null;
-client.ffmpeg = null;
+client.queue = [];
+client.current = {};
+client.next = {};
 
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
@@ -77,33 +79,46 @@ client.once(Events.ClientReady, (readyClient) => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
+client.player.on(AudioPlayerStatus.Playing, () => {
+    console.log("PLAYING");
+});
+
+client.player.on(AudioPlayerStatus.Buffering, () => {
+    console.log("BUFFERING");
+});
+
 client.player.on(AudioPlayerStatus.Idle, () => {
-	if(client.queue.length > 0)
+    console.log("IDLE");
+});
+
+client.player.on(AudioPlayerStatus.Idle, async () => {
+	stopProcess(client);
+	if(client.next?.url)
+	{	
+		const streamObject = createStream(client.next.url, pathToFfmpeg);
+
+		// client.next = {};
+		
+		const resource = createAudioResource(streamObject.stream, {
+            inputType: StreamType.Raw
+        });            
+        client.player.play(resource);
+	}
+	// fallback
+	else if(client.queue.length > 0)
 	{
-		client.yt.kill()
-		client.yt.stdout.destroy()
 
-		const yt = spawn(client.ytdl_path, [
-			"-f", "ba",
-			//"-o", "-",
-			"--ffmpeg-location", pathToFfmpeg,
-			"-4",
-			// "--extractor-args", "youtube:player_client=android",
-			"--no-playlist",
-			"--no-warnings",
-			"--quiet",
-			// "--js-runtimes", `node:${process.execPath}`,
-            client.queue.shift()
-        ]);
+		const urlObject = await getAudioUrl(client.queue.shift(), client.ytdl_path);
+        const streamObject = createStream(urlObject.url, pathToFfmpeg);
 
-        client.yt = yt;
-        yt.stderr.on("data", d => console.log(d.toString()));
+        client.current.yt = urlObject.process;
+        client.current.ffmpeg = streamObject.process;
 
-        const resource = createAudioResource(yt.stdout, {
-            inputType: StreamType.WebmOpus
-        });
+        const resource = createAudioResource(streamObject.stream, {
+            inputType: StreamType.Raw
+        });            
+        client.player.play(resource);
 
-		client.player.play(resource)
 	}
 })
 client.player.on("error", console.error);

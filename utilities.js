@@ -87,5 +87,49 @@ function createStream(url, ffmpeg_path) {
     }
 }
 
-module.exports = { createStream, getAudioUrl };
+function stopProcess(client) {
+    if (client.current?.yt) {
+
+        client.current.yt?.removeAllListeners();
+        client.current.yt?.stdout?.removeAllListeners();
+        client.current.yt?.stderr?.removeAllListeners();
+
+        client.current.yt.stdout?.destroy();
+        client.current.yt.stderr?.destroy();
+        client.current.yt.kill('SIGKILL');
+
+    }
+
+    if (client.current?.ffmpeg) {
+
+        client.current.ffmpeg?.removeAllListeners();
+        client.current.ffmpeg?.stdout?.removeAllListeners();
+        client.current.ffmpeg?.stderr?.removeAllListeners();
+
+        client.current.ffmpeg.stdin?.destroy();
+        client.current.ffmpeg.stdout?.destroy();
+        client.current.ffmpeg.kill('SIGKILL');
+        
+    }
+
+    client.current = {};
+}
+
+function stopPrefetchProcess(client) {
+    if (client.next?.yt) {
+        client.next.yt.stdout?.destroy();
+        client.next.yt.stderr?.destroy();
+        client.next.yt.kill('SIGKILL');
+    }
+
+    if (client.next?.ffmpeg) {
+        client.next.ffmpeg.stdin?.destroy();
+        client.next.ffmpeg.stdout?.destroy();
+        client.next.ffmpeg.kill('SIGKILL');
+    }
+
+    client.next = {};
+}
+
+module.exports = { createStream, getAudioUrl, stopProcess };
 
