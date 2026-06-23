@@ -57,6 +57,10 @@ function createStream(url, ffmpeg_path) {
         "pipe:1"
     ]);
 
+    ffmpeg.stderr.on("data", d => {
+    console.log("FFMPEG:", d.toString());
+    });
+
     let started = false;
 
     ffmpeg.stdout.once("data", () => {
