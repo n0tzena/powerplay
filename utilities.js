@@ -6,11 +6,18 @@ function getAudioUrl(query, ytdl_path) {
 
     return new Promise((resolve, reject) => {
         const yt = spawn(ytdl_path, [
-        "-f", "bestaudio",
-        "-g",
-        "--no-playlist",
-        "--quiet",
-        query
+            "-f", "bestaudio[ext=webm]/bestaudio/best",
+            "-g",
+            "--no-playlist",
+            "--quiet",
+            "--no-warnings",
+            "--extractor-retries", "1",
+            "--fragment-retries", "1",
+            "--socket-timeout", "5",
+            "--retries", "1",
+            "--concurrent-fragments", "1",
+            "--extractor-args", "youtube:player_client=android",
+            query
         ]);
 
         let out = "";
